@@ -91,7 +91,7 @@ public class MySocketClient {
     }
 
 
-    public String extractMessage(){
+    private String extractMessage(){
         BufferedReader bufferedReader;
         try {
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
