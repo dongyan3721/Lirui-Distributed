@@ -38,6 +38,7 @@ public class MySocketServer {
         this.deposit = loadUserDeposit();
         this.threadPool = Executors.newFixedThreadPool(5);
         this.server = new ServerSocket(PORT);
+        System.out.println(this.deposit);
         System.out.println("server: socket服务已启动>");
         while(true){
             Socket clientSocket = server.accept();
@@ -52,11 +53,10 @@ public class MySocketServer {
             fileIn = new FileInputStream("deposit.ser");
             ObjectInputStream in = new ObjectInputStream(fileIn);
             ConcurrentHashMap<String, Card> user = (ConcurrentHashMap<String, Card>) in.readObject();
-            System.out.println(user.toString());
+            return user;
         } catch (IOException | ClassNotFoundException e) {
             return new ConcurrentHashMap<>();
         }
-        return new ConcurrentHashMap<>();
     }
 
 
@@ -104,7 +104,7 @@ public class MySocketServer {
                 // 首次登录，给提示
                 if (cnt == 0) {
                     if (deposit.containsKey(consume.getUserId())){
-                        pw.println(String.format("欢迎学号为%s的同学登录，您的卡内剩余余额为%f元",
+                        pw.println(String.format("欢迎学号为%s的同学登录，您的卡内剩余余额为%f元\n",
                                 consume.getUserId(), deposit.get(consume.getUserId()).getLeft()));
                         pw.flush();
                     }else{
@@ -113,7 +113,7 @@ public class MySocketServer {
                         card.setCardId(cardId);
                         card.setLeft(0F);
                         deposit.put(consume.getUserId(), card);
-                        pw.println(String.format("欢迎学号为%s的同学登录，您还没有卡号，已为您创建卡号为%s的储蓄卡，卡内余额%f元",
+                        pw.println(String.format("欢迎学号为%s的同学登录，您还没有卡号，已为您创建卡号为%s的储蓄卡，卡内余额%f元\n",
                                 consume.getUserId(), cardId, 0F));
                         pw.flush();
                     }
@@ -129,15 +129,15 @@ public class MySocketServer {
                     left = left + consumeOrDeposit;
                     if (left >=0){
                         deposit.get(userId).setLeft(left);
-                        pw.println(String.format("消费成功！卡内余额%f元", left));
+                        pw.println(String.format("消费成功！卡内余额%f元\n", left));
                         pw.flush();
                     }else{
-                        pw.println("消费失败，卡内余额不足！");
+                        pw.println("消费失败，卡内余额不足！\n");
                         pw.flush();
                     }
                 }else{
                     deposit.get(userId).setLeft(left+consumeOrDeposit);
-                    pw.println(String.format("充值成功！卡内余额%f元", left+consumeOrDeposit));
+                    pw.println(String.format("充值成功！卡内余额%f元\n", left+consumeOrDeposit));
                     pw.flush();
                 }
 
@@ -151,11 +151,11 @@ public class MySocketServer {
             pw.println("用户退出，连接已关闭");
             pw.flush();
             pw.close();
-            try {
-                request.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+//            try {
+//                request.close();
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
 
             try {
                 serializeUserDeposit(deposit);
