@@ -151,11 +151,6 @@ public class MySocketServer {
             pw.println("用户退出，连接已关闭");
             pw.flush();
             pw.close();
-//            try {
-//                request.close();
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
 
             try {
                 serializeUserDeposit(deposit);
@@ -167,10 +162,6 @@ public class MySocketServer {
 
         public SocketRequestHandler(Socket request) {
             this.request = request;
-        }
-
-        public static void main(String[] args) throws IOException {
-            new MySocketServer();
         }
     }
 }
