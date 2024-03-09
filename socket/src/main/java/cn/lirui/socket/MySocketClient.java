@@ -19,7 +19,7 @@ import java.util.Scanner;
 public class MySocketClient {
     private static final int PORT = 8086;
 
-    private static final String HOST = "192.168.124.6";
+    private static final String HOST = "192.168.124.254";
 
     private Socket socket;
 
@@ -28,6 +28,7 @@ public class MySocketClient {
 
     public MySocketClient() throws IOException {
         Scanner scanner = new Scanner(System.in);
+        System.out.print("client: 一卡通程序，输入close退出连接>\n");
         System.out.print("client: 请输入您的学号以构建连接>");
         this.userId = scanner.next();
         this.socket = new Socket(HOST, PORT);
@@ -52,7 +53,21 @@ public class MySocketClient {
 
         printWriter.flush();
 
-        printWriter.close();
+
+    }
+
+    private void sendMessage(String msg){
+        PrintWriter printWriter ;
+        try {
+            printWriter = new PrintWriter(socket.getOutputStream());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        printWriter.println(msg);
+
+        printWriter.flush();
+
 
     }
 
@@ -65,6 +80,10 @@ public class MySocketClient {
                 line = bufferedReader.readLine();
             } catch (IOException e) {
                 throw new RuntimeException(e);
+            }
+            if (line.equals("close")) {
+                sendMessage("close");
+                continue;
             }
             double consume;
             try {
@@ -81,6 +100,11 @@ public class MySocketClient {
         while (true){
 
             String messageFromServer = extractMessage();
+
+            if (messageFromServer == null){
+                System.out.println("连接已关闭");
+                break;
+            }
 
             if (!messageFromServer.isEmpty()) System.out.printf("server: %s", messageFromServer);
 
