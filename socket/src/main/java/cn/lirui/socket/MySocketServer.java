@@ -29,11 +29,6 @@ public class MySocketServer {
 
     private static final int PORT = 8086;
 
-    public static void main(String[] args) throws IOException {
-        new MySocketServer();
-    }
-
-
     public MySocketServer() throws IOException {
         this.deposit = loadUserDeposit();
         this.threadPool = Executors.newFixedThreadPool(5);
