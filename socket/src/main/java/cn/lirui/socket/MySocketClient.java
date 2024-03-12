@@ -19,7 +19,7 @@ import java.util.Scanner;
 public class MySocketClient {
     private static final int PORT = 8086;
 
-    private static final String HOST = "192.168.124.254";
+    private static final String HOST = "47.120.49.22";
 
     private Socket socket;
 
