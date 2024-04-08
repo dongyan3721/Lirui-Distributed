@@ -1,0 +1,22 @@
+vehicles:
+  Car:
+    mileOnly: true,
+    perMile: 0.5
+  Bus:
+    mileOnly: false,
+    chargePropertiesList: ["people"]
+    people:
+      # 不连续，function是间断函数列表
+      consecutive: false
+      # 此处特别判断函数是不是
+      function: [0.5, 1, 1.2]
+      # 提供各段定义
+      range: ["(0, 7]", "(7, 20]", "(20, infinite)"]
+  Lorry:
+    mileOnly: false
+    chargePropertiesList: ["tons"]
+    tons:
+      # 连续的
+      consecutive: true
+      # 连续计费，function不是列表
+      function: x
